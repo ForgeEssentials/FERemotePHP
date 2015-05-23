@@ -1,11 +1,12 @@
 <?php
 
+// Configure these parameters to your needs
 const ADDRESS = 'localhost';
-
 const PORT = 27020;
 
+// WARNING: Setting a default user and password can be VERY DANGEROUS!
+// Be sure to only use this with a non-existing username who has only restricted privileges!
 const DEFAULT_USER = null;
-
 const DEFAULT_PASSWORD = null;
 
 function getArg($name) {
