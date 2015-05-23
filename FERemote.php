@@ -1,8 +1,5 @@
 <?php
 
-class FERemoteException extends \Exception {
-}
-
 class SocketException extends \Exception {
 }
 
@@ -52,7 +49,6 @@ class FERemote {
 				$this->lastError = 0;
 				$this->lastErrorMessage = "Could not create socket";
 				throw new SocketException($this->lastErrorMessage, $this->lastError);
-				return false;
 			}
 		}
 		
@@ -62,7 +58,6 @@ class FERemote {
 			$this->lastError = socket_last_error($this->socket);
 			$this->lastErrorMessage = socket_strerror($this->lastError);
 			throw new SocketException($this->lastErrorMessage, $this->lastError);
-			return false;
 		}
 		socket_set_block($this->socket);
 		$this->connected = true;
