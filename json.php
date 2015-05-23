@@ -31,11 +31,11 @@ $data = getArg('data');
 $username = getArg('username');
 $password = getArg('password');
 
-if (!$user)
-	$user = DEFAULT_USER;
+if (!$username)
+	$username = DEFAULT_USER;
 
 if (!$password)
-	$user = DEFAULT_PASSWORD;
+	$password = DEFAULT_PASSWORD;
 
 if (!$id)
 	return error('Missing request ID');
