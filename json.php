@@ -51,8 +51,11 @@ try {
 	return error('Error connecting to server: ' . $e->getMessage());
 }
 
-if ($data)
-	$data = json_decode($data);
+if ($data) {
+	$decodedData = @json_decode($data);
+	if ($decodedData)
+		$data = $decodedData;
+}
 
 $remote->sendRequest($id, $data);
 
