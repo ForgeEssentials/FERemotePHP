@@ -1,11 +1,11 @@
 <?php
 
+namespace ForgeEssentials\Remote;
+
 class SocketException extends \Exception {
 }
 
-class FERemote {
-
-	/**************************************************************/
+class Client {
 
 	private $adress = 'localhost';
 
