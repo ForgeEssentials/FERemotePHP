@@ -171,19 +171,25 @@ class Client {
 		}
 	}
 	
-	public function receiveResponse($assoc = false, $exceptionOnTimeout = true) {
-		$message = $this->read();
-		if ($message === false)
-			if ($exceptionOnTimeout)
-				throw new SocketException(socket_strerror(SOCKET_ETIMEDOUT), SOCKET_ETIMEDOUT);
-			else
-				return false;
-		return $this->decode($message, $assoc);
+	public function waitForResponse($id, $assoc = false, $exceptionOnTimeout = true) {
+		while (true) {
+			$message = $this->read();
+			if ($message === false)
+				if ($exceptionOnTimeout)
+					throw new SocketException(socket_strerror(SOCKET_ETIMEDOUT), SOCKET_ETIMEDOUT);
+				else
+					return false;
+			$message = $this->decode($message, $assoc);
+			$messageObj = (object) $message;
+			if ($messageObj->id == $id)
+				break;
+		}
+		return $message;
 	}
 	
 	public function query($id, $data = null, $assoc = false, $exceptionOnTimeout = true) {
 		$this->sendRequest($id, $data);
-		return $this->receiveResponse($assoc, $exceptionOnTimeout);
+		return $this->waitForResponse($id, $assoc, $exceptionOnTimeout);
 	}
 	
 	/**************************************************************/
