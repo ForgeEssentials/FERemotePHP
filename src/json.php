@@ -1,19 +1,25 @@
 <?php
 
+include "Client.php";
+
+use ForgeEssentials\Remote\Client;
+use ForgeEssentials\Remote\SocketException;
+
 // Configure these parameters to your needs
 const ADDRESS = 'localhost';
-const PORT = 27020;
+const PORT = 27031;
 
 // WARNING: Setting a default user and password can be VERY DANGEROUS!
 // Be sure to only use this with a non-existing username who has only restricted privileges!
 const DEFAULT_USER = null;
-const DEFAULT_PASSWORD = null;
+const DEFAULT_PASSKEY = null;
 
 function getArg($name) {
 	return isset($_REQUEST[$name]) ? $_REQUEST[$name] : null;
 }
 
 function error($message) {
+	header("Content-type: application/json");
 	echo json_encode(array(
 		'success' => false,
 		'message' => $message
@@ -21,29 +27,26 @@ function error($message) {
 	exit;
 }
 
-include "FERemote.php";
-
-header("Content-type: application/json");
 
 $id = getArg('id');
 $rid = getArg('rid');
 $data = getArg('data');
 $username = getArg('username');
-$password = getArg('password');
+$passkey = getArg('passkey');
 
 if (!$username)
 	$username = DEFAULT_USER;
 
-if (!$password)
-	$password = DEFAULT_PASSWORD;
+if (!$passkey)
+	$passkey = DEFAULT_PASSKEY;
 
 if (!$id)
 	return error('Missing request ID');
 
-if ($username && !$password)
-	return error('Missing password');
+if ($username && !$passkey)
+	return error('Missing passkey');
 
-$remote = new FERemote(ADDRESS, PORT, $username, $password);
+$remote = new Client(ADDRESS, PORT, $username, $passkey);
 
 try {
 	$remote->connect();
@@ -65,6 +68,7 @@ if ($response === false) {
 	return error('Connection timed out');
 }
 
+header("Content-type: application/json");
 echo $response;
 
 exit;
